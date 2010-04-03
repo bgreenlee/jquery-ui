@@ -381,9 +381,6 @@ $.widget( "ui.slider", $.ui.mouse, {
 			this._change( event, this._handleIndex );
 		}
 
-		this._stop( event, this._handleIndex );
-		this._change( event, this._handleIndex );
-
 		this._handleIndex = null;
 		this._clickOffset = null;
 		this._animateOff = false;

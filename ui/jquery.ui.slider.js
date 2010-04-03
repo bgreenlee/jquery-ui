@@ -146,11 +146,11 @@ $.widget( "ui.slider", $.ui.mouse, {
 		});
 
 		this.handles
-			.add(this.range)
+			.add( this.range )
 			.keydown(function( event ) {
 				var ret = true,
 					index = $( this ).data( "index.ui-slider-handle" ),
-					isRange = (index === undefined),
+					isRange = ( index === undefined ),
 					allowed,
 					curVal,
 					newVal,
@@ -160,7 +160,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 					return;
 				}
 
-				if (isRange) {
+				if ( isRange ) {
 					this._startRangeDragging();
 					index = 0;
 				} else {
@@ -310,20 +310,24 @@ $.widget( "ui.slider", $.ui.mouse, {
 		}
 
 		// if range dragging is enabled, see if the mouse is within the range
-		if (o.draggableRange && normValue > this.values(0) && normValue < this.values(1)) {
-			this._startRangeDragging(normValue);
+		if ( o.draggableRange && normValue > this.values(0) && normValue < this.values(1) ) {
+			this._startRangeDragging( normValue );
 			this._animateOff = true;
 		} else {
 			this._rangeDragging = false;
 		}
-		var allowed = this._rangeDragging ?
-						this._start(event, 0) && this._start(event, 1) :
-						this._start(event, index);
-		if (allowed === false) {
+
+		if ( this._rangeDragging ) {
+			allowed = this._start( event, 0 ) && this._start( event, 1 );
+		} else {
+			allowed = this._start( event, index );
+		}
+		
+		if ( allowed === false ) {
 			return false;
 		}
 
-		if (!this._rangeDragging) {
+		if ( !this._rangeDragging ) {
 			this._mouseSliding = true;
 
 			self._handleIndex = index;
@@ -357,12 +361,12 @@ $.widget( "ui.slider", $.ui.mouse, {
 	_mouseDrag: function( event ) {
 		var position = { x: event.pageX, y: event.pageY },
 			normValue = this._normValueFromMouse( position );
-		
-		if (this._rangeDragging) {
+
+		if ( this._rangeDragging ) {
 			var change = this._rangeDraggingMouseStart - normValue;
-			this._slide(event, 0, this._rangeDraggingStartValues[0] - change);
+			this._slide( event, 0, this._rangeDraggingStartValues[0] - change );
 		} else {
-			this._slide(event, this._handleIndex, normValue);
+			this._slide( event, this._handleIndex, normValue );
 		}
 
 		return false;
@@ -371,8 +375,8 @@ $.widget( "ui.slider", $.ui.mouse, {
 	_mouseStop: function( event ) {
 		this.handles.removeClass( "ui-state-active" );
 		this._mouseSliding = false;
-		if (this._rangeDragging) {
-			for (var i = 0; i < 2; i++) {
+		if ( this._rangeDragging ) {
+			for ( var i = 0; i < 2; i++ ) {
 				this._stop( event, i );
 				this._change( event, i );
 			}
@@ -460,16 +464,16 @@ $.widget( "ui.slider", $.ui.mouse, {
 					values: newValues
 				} );
 				otherVal = this.values( index ? 0 : 1 );
-				if (allowed !== false) {
+				if ( allowed !== false ) {
 					// if we're dragging a range, move both sliders, but trim so we keep the range width
-					if (this._rangeDragging) {
-							if (newVal + this._rangeWidth > this._valueMax()) {
+					if ( this._rangeDragging ) {
+							if ( newVal + this._rangeWidth > this._valueMax() ) {
 								newVal = this._valueMax() - this._rangeWidth;
 							}
-							this.values(0, newVal, true);
-							this.values(1, this.values(0) + this._rangeWidth, true);
+							this.values( 0, newVal, true );
+							this.values( 1, this.values(0) + this._rangeWidth, true );
 					} else {
-						this.values(index, newVal, true);
+						this.values( index, newVal, true );
 					}
 				}
 			}
@@ -557,14 +561,14 @@ $.widget( "ui.slider", $.ui.mouse, {
 		}
 	},
 
-	_startRangeDragging: function(normValue) {
-		if (normValue === undefined) {
-			normValue = this.values(0);
+	_startRangeDragging: function( normValue ) {
+		if ( normValue === undefined ) {
+			normValue = this.values( 0 );
 		}
 		this._rangeDragging = true;
 		this._rangeDraggingMouseStart = normValue;
-		this._rangeDraggingStartValues = [this.values(0), this.values(1)];
-		this._rangeWidth = Math.abs(this.values(1) - this.values(0));
+		this._rangeDraggingStartValues = [ this.values( 0 ), this.values( 1 ) ];
+		this._rangeWidth = Math.abs( this.values( 1 ) - this.values( 0 ) );
 	},
 
 	_setOption: function( key, value ) {

@@ -30,7 +30,6 @@ $.widget( "ui.slider", $.ui.mouse, {
 		min: 0,
 		orientation: "horizontal",
 		range: false,
-		draggableRange: false,
 		step: 1,
 		value: 0,
 		values: null
@@ -41,10 +40,6 @@ $.widget( "ui.slider", $.ui.mouse, {
 			o = this.options;
 
 		var self = this, o = this.options;
-		// draggableRange implies range
-		if (o.draggableRange === true) {
-		  o.range = true;
-		}
 
 		this._keySliding = false;
 		this._mouseSliding = false;
@@ -70,11 +65,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 
 		if ( o.range ) {
 			if ( o.range === true ) {
-				if (o.draggableRange === true) {
-					this.range = $( '<a href="#"></a>' );
-				} else {
-				  this.range = $( '<div></div>' );
-				}
+				this.range = $( '<a href="#"></a>' );
 				if ( !o.values ) {
 					o.values = [ this._valueMin(), this._valueMin() ];
 				}
@@ -310,7 +301,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 		}
 
 		// if range dragging is enabled, see if the mouse is within the range
-		if ( o.draggableRange && normValue > this.values(0) && normValue < this.values(1) ) {
+		if ( o.range === true && normValue > this.values(0) && normValue < this.values(1) ) {
 			this._startRangeDragging( normValue );
 			this._animateOff = true;
 		} else {

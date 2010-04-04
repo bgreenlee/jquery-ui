@@ -12,7 +12,6 @@ var slider_defaults = {
 	min: 0,
 	orientation: 'horizontal',
 	range: false,
-	draggableRange: false,
 	step: 1,
 	value: 0,
 	values: null

@@ -146,16 +146,16 @@ $.widget( "ui.slider", $.ui.mouse, {
 					curVal,
 					newVal,
 					step;
-	
+
 				if ( self.options.disabled ) {
 					return;
 				}
 
 				if ( isRange ) {
-					this._startRangeDragging();
+					self._startRangeDragging();
 					index = 0;
 				} else {
-					this._rangeDragging = false;
+					self._rangeDragging = false;
 				}
 
 				switch ( event.keyCode ) {
@@ -178,7 +178,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 						}
 						break;
 				}
-	
+
 				step = self.options.step;
 				if ( self.options.values && self.options.values.length ) {
 					curVal = newVal = self.values( index );
@@ -216,13 +216,13 @@ $.widget( "ui.slider", $.ui.mouse, {
 				}
 	
 				self._slide( event, index, newVal );
-	
+
 				return ret;
-	
+
 			})
 			.keyup(function( event ) {
 				var index = $( this ).data( "index.ui-slider-handle" );
-	
+
 				if ( self._keySliding ) {
 					self._keySliding = false;
 					self._stop( event, index );
@@ -318,13 +318,17 @@ $.widget( "ui.slider", $.ui.mouse, {
 			return false;
 		}
 
-		if ( !this._rangeDragging ) {
+		if ( this._rangeDragging ) {
+			this.range
+			.addClass( "ui-state-active" )
+			.focus();
+		} else {
 			this._mouseSliding = true;
 
 			self._handleIndex = index;
 
 			closestHandle
-				.addClass("ui-state-active")
+				.addClass( "ui-state-active" )
 				.focus();
 		
 			var offset = closestHandle.offset();
@@ -364,14 +368,15 @@ $.widget( "ui.slider", $.ui.mouse, {
 	},
 
 	_mouseStop: function( event ) {
-		this.handles.removeClass( "ui-state-active" );
 		this._mouseSliding = false;
 		if ( this._rangeDragging ) {
+			this.range.removeClass( "ui-state-active" );
 			for ( var i = 0; i < 2; i++ ) {
 				this._stop( event, i );
 				this._change( event, i );
 			}
 		} else {
+			this.handles.removeClass( "ui-state-active" );
 			this._stop( event, this._handleIndex );
 			this._change( event, this._handleIndex );
 		}
@@ -439,8 +444,11 @@ $.widget( "ui.slider", $.ui.mouse, {
 		if ( this.options.values && this.options.values.length ) {
 			otherVal = this.values( index ? 0 : 1 );
 
-			if ( ( this.options.values.length === 2 && this.options.range === true ) && 
-					( ( index === 0 && newVal > otherVal) || ( index === 1 && newVal < otherVal ) )
+			if ( ( this.options.values.length === 2 && 
+						 this.options.range === true && 
+						 this._rangeDragging === false ) && 
+					( ( index === 0 && newVal > otherVal) || 
+						( index === 1 && newVal < otherVal ) )
 				) {
 				newVal = otherVal;
 			}

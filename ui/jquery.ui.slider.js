@@ -76,10 +76,6 @@ $.widget( "ui.slider", $.ui.mouse, {
 				this.range = $( "<div></div>" );
 			}
 
-			this.range
-				.appendTo( this.element )
-				.addClass( "ui-slider-range" );
-
 			if ( o.range === "min" || o.range === "max" ) {
 				this.range.addClass( "ui-slider-range-" + o.range );
 			}
@@ -108,6 +104,12 @@ $.widget( "ui.slider", $.ui.mouse, {
 				" ui-corner-all" );
 
 		this.handle = this.handles.eq( 0 );
+
+		if ( o.range ) {
+			this.range
+				.insertAfter( this.handle )
+				.addClass( "ui-slider-range" );
+		}
 
 		this.handles.add( this.range ).filter( "a" )
 			.click(function( event ) {
